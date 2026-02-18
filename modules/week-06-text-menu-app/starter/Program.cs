@@ -10,6 +10,9 @@
 - Runs a text-heavy menu app that demonstrates string formatting and output patterns.
 - */
 
+using System.Reflection;
+using System.Security.Cryptography;
+
 namespace TextMenuApp;
 
 public class Program
@@ -28,9 +31,8 @@ public class Program
 
         int choice = 0;
 
-        // TODO 2: Create a menu loop that repeats until user chooses 6 (Exit)
-        // Hint: Use a while loop
         while (choice != 6){
+            Console.WriteLine(" ");
             // menu display
             Console.WriteLine("- Options -\n".PadLeft(17) +
                               "1) Greeting Card\n" +
@@ -46,130 +48,136 @@ public class Program
 
             switch (choice) {
                 case 1:
-                    Console.WriteLine("hii");
-                    // ===== OPTION 1: Greeting Card =====
-                    // Prompts: "Enter your name: " and "Enter a short message: "
-                    // Required string operations:
-                    // - Use Trim() to clean up the name
-                    // - Use ToUpper() for an uppercase version
-                    // - Use concatenation OR interpolation for greeting text
-                    // - Use string.Format() for at least one output line
-                    // - Display a boxed card with the name, uppercase name, and message
-                    // Include the word "Message:" in your output
-                    string greetingName;
-                    string greetingMessage;
+                    // input
+                    Console.Write("Enter your name: ");
+                    string greetingName = Console.ReadLine().Trim();
+                    Console.Write("Enter a short message: ");
+                    string greetingMessage = Console.ReadLine();
+
+                    // string operations
+                    string greetingNameUpper = greetingName.ToUpper();
+
+                    // output
+                    Console.WriteLine("=============================================");
+                    Console.WriteLine(string.Format("{0}          {1}", greetingName, greetingNameUpper));
+                    Console.WriteLine("Message: " + greetingMessage);
+                    Console.WriteLine("=============================================");
                     break;
                 case 2:
-                    // ===== OPTION 2: Name Tag Formatter =====
-                    // Prompts: "Enter first name: " and "Enter last name: "
-                    // Required string operations:
-                    // - Use Trim() on both inputs
-                    // - Use concatenation to build full name
-                    // - Use string indexing to get first characters for initials
-                    // - Use ToUpper() for initials
-                    // - Use ToLower() for lowercase version
-                    // Display three things:
-                    // - Name tag with the full name (include a bracket [)
-                    // - Initials (use word "Initials:" in label)
-                    // - Lowercase version (use word "Lowercase:" in label)
-                    string tagFirst;
-                    string tagLast;
+                    Console.Write("Enter first name: ");
+                    string tagFirst = Console.ReadLine().Trim();
+                    Console.Write("Enter last name: ");
+                    string tagLast = Console.ReadLine().Trim();
+
+                    // string operations
+                    string tagFull = (tagFirst + " " + tagLast);
+                    string tagInitialFirst = tagFirst.Substring(0, 1).ToUpper(); // grab first letter
+                    string tagInitialLast = tagLast.Substring(0, 1).ToUpper();
+                    string tagFullLower = tagFull.ToLower();
+
+                    // output
+                    Console.WriteLine("[" + tagFull + " | Initials: " + tagInitialFirst + tagInitialLast + " | Lowercase: " + tagFullLower + "]");
+
 
                     break;
                 case 3:
-                    string phraseInput;
+                    // input
+                    Console.Write("Enter a phrase: ");
+                    string phraseInput = Console.ReadLine().Trim();
+
+                    // string operations
+                    int phraseLength = phraseInput.Length;
+                    bool phraseContains = phraseInput.ToLower().Contains("a");
+                    string phraseDashes = phraseInput.Replace(" ", "-");
+                    string[] phraseSplit = phraseInput.Split(" ");
+                    string phraseList = String.Join(", ", phraseSplit);
+
+                    // output
+                    Console.WriteLine("Phrase Length: " + phraseLength +
+                                      "\nPhrase contains \'a\'? " + phraseContains +
+                                      "\nDashed version: " + phraseDashes +
+                                      "\nWord List: " + phraseList);
+
                     break;
                 case 4:
-                // ===== OPTION 4: Fancy Receipt Line =====
-                // Prompts: "Enter item name: ", "Enter price: ", "Enter quantity (1-9): "
-                // Use ReadDouble for price and ReadIntInRange for quantity
-                // Required:
-                // - Calculate total (price * quantity)
-                // - Create a receipt table with header row (ITEM, QTY, TOTAL)
-                // - Use string.Format() with composite formatting for the data row
-                // - Use alignment specifiers (left/right alignment)
-                // - Use currency format specifier (:C2) for the total
-                    string itemName;
-                    double itemPrice;
-                    int itemQuantity;
-
                     // inputs
                     Console.Write("Enter item name: ");
-                    itemName = Console.ReadLine();
-                    itemPrice = ReadDouble("Enter price: ");
-                    itemQuantity = ReadIntInRange("Enter quantity (1-9): ");
+                    string itemName = Console.ReadLine();
+                    double itemPrice = ReadDouble("Enter price: ");
+                    int itemQuantity = ReadIntInRange("Enter quantity (1-9): ", 1, 9);
 
                     // total price
                     double itemTotal = itemPrice * itemQuantity;
+                    string receiptTable = String.Format("| {0,-5} | {1} | {2,5:C2} |", itemName, itemQuantity, itemTotal);
+                    string receiptBorder = new string('=', receiptTable.Length);
 
                     // output
+                    Console.WriteLine(receiptBorder + "\n" + receiptTable + "\n" + receiptBorder);
+
 
                     break;
                 case 5:
-                    // ===== OPTION 5: Menu Banner Builder =====
-                    // Prompts: "Enter a title: ", "Enter a subtitle: ", "Enter width (30-60): "
-                    // Use ReadIntInRange for width (min=30, max=60)
-                    // Required string operations:
-                    // - Create border line with equals signs (use new string constructor)
-                    // - Use PadLeft() to center text (formula: (width + text.Length) / 2)
-                    // - Use ToUpper() on title
-                    // - Display banner with borders and centered text
-                    // - Show three alignment examples (centered, left, right)
-                    string bannerTitle;
-                    string bannerSubtitle;
-                    int bannerWidth = ReadIntInRange("Enter width (30-60): ");
+                    Console.Write("Enter a title: ");
+                    string bannerTitle = Console.ReadLine();
+                    Console.Write("Enter a subtitle: ");
+                    string bannerSubtitle = Console.ReadLine();
+                    int bannerWidth = ReadIntInRange("Enter width (30-60): ", 30, 60);
+                    string bannerBorder = new string('=', bannerWidth);
+
+                    // output
+                    // centered
+                    Console.WriteLine("Centered\n");
+                    Console.WriteLine(bannerBorder + "\n" +
+                                      bannerTitle.PadLeft((bannerWidth + bannerTitle.Length) / 2).ToUpper() + "\n" +
+                                      bannerSubtitle.PadLeft((bannerWidth + bannerSubtitle.Length) / 2) + "\n" +
+                                      bannerBorder);
+                    // left
+                    Console.WriteLine("Left\n");
+                    Console.WriteLine(bannerBorder + "\n" +
+                                      bannerTitle.ToUpper() + "\n" +
+                                      bannerSubtitle + "\n" +
+                                      bannerBorder);
+                    // right
+                    Console.WriteLine("Right\n");
+                    Console.WriteLine(bannerBorder + "\n" +
+                                      bannerTitle.PadLeft(bannerWidth).ToUpper() + "\n" +
+                                      bannerSubtitle.PadLeft(bannerWidth) + "\n" +
+                                      bannerBorder);
+
                     break;
                 case 6:
                     // input
                     Console.Write("Enter a closing word: ");
+                    String closingInput = Console.ReadLine();
+
+                    // string operations
+                    bool closingEquals = string.Equals(closingInput, "goodbye",StringComparison.OrdinalIgnoreCase);
+                    string closingFirstThree;
+                    if (closingInput.Length >= 3) {
+                        closingFirstThree = closingInput.Substring(0,3);
+                    } else {
+                        closingFirstThree = closingInput;
+                    }
+                    bool closingExclamation = closingInput.EndsWith("!");
+                    int closingIndex = closingInput.IndexOf(" ");
 
                     // output
+                    Console.WriteLine("Equals \"goodbye\"? " + closingEquals +
+                                      "\nFirst three letters: " + closingFirstThree +
+                                      "\nEnds with exclamation? " + closingExclamation);
+                    if (closingIndex >= 0) {
+                        Console.WriteLine("Space position: " + closingIndex+1);
+                    } else { // if no space
+                        Console.WriteLine("Space position: N/A");
+                    }
+
                     Console.WriteLine("Goodbye!");
                     break;
                 default:
-                    Console.WriteLine("This shouldn't appear!!!")
+                    Console.WriteLine("This shouldn't appear!");
                     break;
             }
 
-            // ===== OPTION 2: Name Tag Formatter =====
-            // Prompts: "Enter first name: " and "Enter last name: "
-            // Required string operations:
-            // - Use Trim() on both inputs
-            // - Use concatenation to build full name
-            // - Use string indexing to get first characters for initials
-            // - Use ToUpper() for initials
-            // - Use ToLower() for lowercase version
-            // Display three things:
-            // - Name tag with the full name (include a bracket [)
-            // - Initials (use word "Initials:" in label)
-            // - Lowercase version (use word "Lowercase:" in label)
-
-            // ===== OPTION 3: Phrase Analyzer =====
-            // Prompt: "Enter a phrase: "
-            // Required string operations:
-            // - Use Trim() on input
-            // - Use Length property
-            // - Use Contains() to check for letter 'a' (convert to lowercase first)
-            // - Use Replace() to change spaces to dashes
-            // - Use Split() to break into words
-            // - Use string.Join() to create comma-separated list
-            // Display: length, contains check, dashed version, and words list
-
-
-
-
-
-            // ===== OPTION 6: Exit with String Analysis =====
-            // Prompt: "Enter a closing word: "
-            // Required string operations (demonstrate these 4 methods):
-            // - Use Equals() with StringComparison.OrdinalIgnoreCase to compare with "goodbye"
-            // - Use Substring() to extract first 3 characters (check length first!)
-            // - Use EndsWith() to check if ends with "!"
-            // - Use IndexOf() to find position of space character
-            // Display the results of all four operations
-            // Then print: "Goodbye!"
-
-            // TODO 6: Add a blank line between menu actions (but not after Exit)
             if (choice != 6) {
                 Console.WriteLine("");
             }
@@ -199,10 +207,6 @@ public class Program
             Console.Write(prompt);
             isValid = double.TryParse(Console.ReadLine(), out value);
         } while (!isValid);
-        // TODO 8: Implement input validation
-        // Use a do-while loop with double.TryParse()
-        // Keep prompting until input is a valid number
-        // Return the valid number
 
         return value;
     }
