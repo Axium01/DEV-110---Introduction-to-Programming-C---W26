@@ -3,7 +3,7 @@
 - Instructor: Zak Brinlee
 - Term: Winter 2026
 -
-- Programmer: YourName
+- Programmer: Milo Wearn
 - Assignment: Week 8: Mad Libs (Structure + Debugging)
 -
 - What does this program do?:
@@ -27,23 +27,25 @@ public class StoryTemplate
 
     public string TemplateText { get; }
 
-    // TODO 1: Implement GenerateStory method
-    // This method should:
-    // - Validate that words.Length equals Prompts.Length
-    // - Call FormatStory to build the final story string
-    // - Return the formatted story
     public string GenerateStory(string[] words)
     {
-        throw new NotImplementedException();
+        string generatedStory;
+        if (words.Length != Prompts.Length) { // not equal lengths
+            return "Cannot generate story!";
+        } else { // equal lengths
+            generatedStory = FormatStory(words);
+        }
+        return generatedStory;
     }
 
-    // TODO 2: Implement FormatStory method (private helper)
-    // This method should:
-    // - Convert string[] words to object[] (required for string.Format)
-    // - Call string.Format with TemplateText and the object array
-    // - Return the formatted story
     private string FormatStory(string[] words)
     {
-        throw new NotImplementedException();
+        object[] wordsObj = new object[words.Length];
+        // converting array
+        for (int i = 0; i < words.Length; i++) {
+            wordsObj[i] = words[i];
+        }
+        string formattedStory = string.Format(TemplateText, wordsObj);
+        return formattedStory;
     }
 }
