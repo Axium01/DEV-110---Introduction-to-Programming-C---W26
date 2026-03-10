@@ -3,13 +3,14 @@
 - Instructor: Zak Brinlee
 - Term: Winter 2026
 -
-- Programmer: YourName
+- Programmer: Milo Wearn
 - Assignment: Week 9: Score Stats (Methods + LINQ)
 -
 - What does this program do?:
 - Defines a ScoreReport class students complete using LINQ methods.
 - */
 
+using System.ComponentModel.DataAnnotations;
 using System.Globalization;
 using System.Linq;
 
@@ -29,85 +30,73 @@ internal class ScoreReport
 
     public int Count => _scores.Length;
 
-    // TODO 1: Implement PrintReport
-    // This method orchestrates printing the full report.
-    // Requirements:
-    // - Call PrintBasicStats()
-    // - Call PrintPassingFailingCounts()
-    // - Print a blank line
-    // - Call PrintScoresSorted()
-    // - Call PrintTopScores(3)
-    // - Call PrintPassingScores()
-    // - Call PrintFailingScores()
+    // calls everything to print a report.
     public void PrintReport()
     {
-        throw new NotImplementedException();
+        PrintBasicStats();
+        PrintPassingFailingCounts();
+        PrintScoresSorted();
+        PrintTopScores(3);
+        PrintPassingScores();
+        PrintFailingScores();
     }
 
-    // TODO 2: Implement PrintBasicStats
-    // Requirements:
-    // - Use _scores.Min() to get the minimum score
-    // - Use _scores.Max() to get the maximum score
-    // - Use _scores.Average() to get the average score
-    // - Print exactly:
-    //   Count: X
-    //   Min: X
-    //   Max: X
-    //   Average: X.X  (format to 1 decimal place using CultureInfo.InvariantCulture)
+    // prints the following
+    // Count: W
+    // Min: X
+    // Max: Y
+    // Average: Z  (formatted to 1 decimal place)
+    // where W is the total score count, X is the minimum score, Y is the maximum score, and Z is the average of all scores.
     private void PrintBasicStats()
     {
-        throw new NotImplementedException();
+        int minScores = _scores.Min();
+        int maxScores = _scores.Max();
+        double avgScores = _scores.Average();
+
+        Console.WriteLine($"Count: {_scores.Length}\nMin: {minScores}\nMax: {maxScores}\nAverage: {avgScores:F1}");
     }
 
-    // TODO 3: Implement PrintPassingFailingCounts
-    // Requirements:
-    // - Use _scores.Count(score => score >= Threshold) for passing count
-    // - Use _scores.Count(score => score < Threshold) for failing count
-    // - Print exactly:
-    //   Passing (>=threshold): X
-    //   Failing (<threshold): X
+    // prints the following
+    // Passing (>=threshold): X
+    // Failing (<threshold): Y
+    // where X is the list of passing scores and Y is the list of failing scores
     private void PrintPassingFailingCounts()
     {
-        throw new NotImplementedException();
+        int passCount = _scores.Count(score => score >= Threshold);
+        int failCount = _scores.Count(score => score < Threshold);
+
+        Console.WriteLine($"Passing (>={Threshold}): {passCount}\nFailing (<{Threshold}): {failCount}");
     }
 
-    // TODO 4: Implement PrintScoresSorted
-    // Requirements:
-    // - Use _scores.OrderBy(score => score) to sort ascending
-    // - Use string.Join(", ", sorted) to format the scores
-    // - Print exactly: Sorted (asc): 10, 20, 30
+    // prints scores sorted in ascending order "Sorted (asc): {list}"
     private void PrintScoresSorted()
     {
-        throw new NotImplementedException();
+        string formattedScores = string.Join(", ", _scores.OrderBy(score => score));
+
+        Console.WriteLine($"Sorted (asc): {formattedScores}");
     }
 
-    // TODO 5: Implement PrintTopScores
-    // Requirements:
-    // - Chain: _scores.OrderByDescending(score => score).Take(topCount)
-    // - Use string.Join(", ", top) to format
-    // - Print exactly: Top X: 30, 20, 10
+    // prints top scores as "Top X: {list}" where X is topCount
     private void PrintTopScores(int topCount)
     {
-        throw new NotImplementedException();
+        string topScoresFormatted = string.Join(", ", _scores.OrderByDescending(score => score).Take(topCount));
+
+        Console.WriteLine($"Top {topCount}: {topScoresFormatted}");
     }
 
-    // TODO 6: Implement PrintPassingScores
-    // Requirements:
-    // - Chain: _scores.Where(score => score >= Threshold).OrderByDescending(score => score)
-    // - Use string.Join(", ", passingScores) to format
-    // - Print exactly: Passing scores (desc): 30, 20
+    // prints passing scores as "Passing scores (desc): {list}"
     private void PrintPassingScores()
     {
-        throw new NotImplementedException();
+        string formattedScores = string.Join(", ", _scores.Where(score => score >= Threshold).OrderByDescending(score => score));
+
+        Console.WriteLine($"Passing scores (desc): {formattedScores}");
     }
 
-    // TODO 7: Implement PrintFailingScores
-    // Requirements:
-    // - Chain: _scores.Where(score => score < Threshold).OrderByDescending(score => score)
-    // - Use string.Join(", ", failingScores) to format
-    // - Print exactly: Failing scores (desc): 10
+    // prints failing scores as "Failing scores (desc): {list}"
     private void PrintFailingScores()
     {
-        throw new NotImplementedException();
+        string failingScoresFormatted = string.Join(", ", _scores.Where(score => score < Threshold).OrderByDescending(score => score));
+
+        Console.WriteLine($"Failing scores (desc): {failingScoresFormatted}");
     }
 }
